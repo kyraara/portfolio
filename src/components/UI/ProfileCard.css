@@ -1,0 +1,158 @@
+:root {
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+  --rotate-x: 0deg;
+  --rotate-y: 0deg;
+}
+
+/* ================= WRAPPER ================= */
+.pc-card-wrapper {
+  perspective: 900px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ================= CARD ================= */
+.pc-card {
+  position: relative;
+  width: 340px;
+  aspect-ratio: 0.72;
+  border-radius: 28px;
+  background: #0b0f1a;
+  overflow: hidden;
+
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rotate-x)) rotateY(var(--rotate-y));
+  transition: transform 0.4s ease;
+
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.65);
+}
+
+/* ================= AVATAR ================= */
+.pc-avatar-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* BASE IMAGE — ALWAYS A BIT DARK */
+.pc-avatar-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.75) contrast(1.05);
+}
+
+/* GLOBAL DARK OVERLAY */
+.pc-avatar-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 🔥 SPOTLIGHT (DESKTOP ONLY) */
+.pc-avatar-content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+
+  background: radial-gradient(
+    circle 180px at var(--pointer-x) var(--pointer-y),
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.35) 30%,
+    rgba(0, 0, 0, 0.2) 55%,
+    rgba(0, 0, 0, 0.6) 75%
+  );
+
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  mix-blend-mode: soft-light;
+}
+
+/* ACTIVE ON HOVER (DESKTOP) */
+.pc-card-wrapper:hover .pc-avatar-content::after {
+  opacity: 1;
+}
+
+/* ================= TEXT ================= */
+.pc-details {
+  position: absolute;
+  top: 24px;
+  width: 100%;
+  text-align: center;
+  z-index: 5;
+}
+
+.pc-details h3 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: white;
+}
+
+.pc-details p {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #9fb4ff;
+}
+
+/* ================= FOOTER ================= */
+.pc-user-info {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  right: 18px;
+  z-index: 6;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border-radius: 18px;
+  padding: 12px 14px;
+}
+
+.pc-handle {
+  font-size: 13px;
+  color: white;
+}
+
+.pc-status {
+  font-size: 12px;
+  color: #9fb4ff;
+}
+
+.pc-user-info button {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: white;
+  cursor: pointer;
+}
+
+.pc-user-info button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ================================================= */
+/* 📱 MOBILE SAFE MODE */
+/* ================================================= */
+@media (pointer: coarse) {
+  .pc-card {
+    transform: none !important;
+  }
+
+  .pc-avatar-content::after {
+    display: none;
+  }
+}
