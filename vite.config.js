@@ -8,23 +8,4 @@ export default defineConfig({
   tailwindcss()
   ],
   assetsInclude: ["**/*.glb", "**/*.gltf"],
-  build: {
-    chunkSizeWarningLimit: 1000, // Naikkan limit warning
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          // Pisahkan library berat ke file terpisah (chunking)
-          if (id.includes('node_modules')) {
-            if (id.includes('@react-three') || id.includes('three')) {
-              return 'vendor-3d'; // 3D engine dipisah
-            }
-            if (id.includes('framer-motion')) {
-              return 'vendor-animation'; // Framer motion dipisah
-            }
-            return 'vendor'; // Sisa node_modules
-          }
-        },
-      },
-    },
-  },
 })
