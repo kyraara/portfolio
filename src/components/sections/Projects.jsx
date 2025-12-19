@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiGithub, FiExternalLink } from "react-icons/fi";
+import { FiGithub, FiExternalLink, FiLock } from "react-icons/fi";
+import { Link } from "react-router-dom"; // Import Link untuk navigasi internal
 
 const projects = [
     {
@@ -11,6 +12,7 @@ const projects = [
             "Sistem pemetaan digital interaktif untuk menampilkan data demografi dan spasial Kabupaten Cirebon secara real-time.",
         image: "https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
         tech: ["Vue 3", "Go (Gin)", "Leaflet", "Tailwind"],
+        // Link '#' akan otomatis diarahkan ke halaman Coming Soon
         githubUrl: "#",
         demoUrl: "#",
     },
@@ -22,8 +24,8 @@ const projects = [
             "Platform landing page estetik untuk jasa hantaran pernikahan, fokus pada galeri visual dan kemudahan pemesanan via WA.",
         image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
         tech: ["React", "Framer Motion", "Vite"],
-        githubUrl: "#",
-        demoUrl: "#",
+        githubUrl: "https://github.com/username/repo", // Contoh link aktif
+        demoUrl: "#", // Masih coming soon
     },
     {
         id: 3,
@@ -34,7 +36,7 @@ const projects = [
         image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
         tech: ["React", "Three.js", "Tailwind"],
         githubUrl: "#",
-        demoUrl: "#",
+        demoUrl: "https://portfolio-v1.com",
     },
     {
         id: 4,
@@ -62,23 +64,10 @@ const ProjectCard = ({ project }) => {
         setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
     };
 
-    const handleFocus = () => {
-        setIsFocused(true);
-        setOpacity(1);
-    };
-
-    const handleBlur = () => {
-        setIsFocused(false);
-        setOpacity(0);
-    };
-
-    const handleMouseEnter = () => {
-        setOpacity(1);
-    };
-
-    const handleMouseLeave = () => {
-        setOpacity(0);
-    };
+    const handleFocus = () => { setIsFocused(true); setOpacity(1); };
+    const handleBlur = () => { setIsFocused(false); setOpacity(0); };
+    const handleMouseEnter = () => { setOpacity(1); };
+    const handleMouseLeave = () => { setOpacity(0); };
 
     return (
         <motion.div
@@ -137,7 +126,7 @@ const ProjectCard = ({ project }) => {
                     {project.description}
                 </p>
 
-                {/* Tech Stack - Menggunakan Code Style seperti di Hero */}
+                {/* Tech Stack */}
                 <div className="flex flex-wrap gap-2 mb-6">
                     {project.tech.map((t, i) => (
                         <span
@@ -149,34 +138,60 @@ const ProjectCard = ({ project }) => {
                     ))}
                 </div>
 
-                {/* Action Buttons (Updated Style) */}
+                {/* Action Buttons */}
                 <div className="flex items-center gap-4 mt-auto pt-4 border-t border-white/5 
-          translate-y-0 opacity-100 
-          md:translate-y-2 md:opacity-80 md:group-hover:translate-y-0 md:group-hover:opacity-100 
-          transition-all duration-300 ease-out"
+                  translate-y-0 opacity-100 
+                  md:translate-y-2 md:opacity-80 md:group-hover:translate-y-0 md:group-hover:opacity-100 
+                  transition-all duration-300 ease-out"
                 >
-                    <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm font-medium text-neutral-400 hover:text-white transition-colors hover:underline underline-offset-4"
-                    >
-                        <FiGithub size={18} />
-                        <span>Code</span>
-                    </a>
+                    {/* BUTTON CODE */}
+                    {project.githubUrl === "#" ? (
+                        // Jika URL '#' -> Link ke Coming Soon
+                        <Link
+                            to="/coming-soon"
+                            className="flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-neutral-400 transition-colors cursor-pointer"
+                        >
+                            <FiLock size={16} />
+                            <span>Code</span>
+                        </Link>
+                    ) : (
+                        // Jika URL ada -> Link Eksternal
+                        <a
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-sm font-medium text-neutral-400 hover:text-white transition-colors hover:underline underline-offset-4"
+                        >
+                            <FiGithub size={18} />
+                            <span>Code</span>
+                        </a>
+                    )}
 
-                    {/* Live Demo Button dengan Shimmer Effect */}
-                    <a
-                        href={project.demoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group/btn relative ml-auto overflow-hidden rounded-full bg-indigo-600 px-4 py-1.5 text-sm font-bold text-white transition-transform active:scale-95"
-                    >
-                        <span className="relative z-10 flex items-center gap-2">
-                            Live Demo <FiExternalLink size={16} />
-                        </span>
-                        <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 group-hover/btn:animate-shine" />
-                    </a>
+                    {/* BUTTON LIVE DEMO */}
+                    {project.demoUrl === "#" ? (
+                        // Jika URL '#' -> Link ke Coming Soon
+                        <Link
+                            to="/coming-soon"
+                            className="group/btn relative ml-auto overflow-hidden rounded-full bg-neutral-800 px-4 py-1.5 text-sm font-bold text-neutral-500 border border-white/5 hover:bg-neutral-700 transition-all active:scale-95"
+                        >
+                            <span className="relative z-10 flex items-center gap-2">
+                                Coming Soon
+                            </span>
+                        </Link>
+                    ) : (
+                        // Jika URL ada -> Link Eksternal
+                        <a
+                            href={project.demoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group/btn relative ml-auto overflow-hidden rounded-full bg-indigo-600 px-4 py-1.5 text-sm font-bold text-white transition-transform active:scale-95 hover:bg-indigo-500"
+                        >
+                            <span className="relative z-10 flex items-center gap-2">
+                                Live Demo <FiExternalLink size={16} />
+                            </span>
+                            <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 group-hover/btn:animate-shine" />
+                        </a>
+                    )}
                 </div>
             </div>
         </motion.div>
@@ -196,7 +211,7 @@ const Projects = () => {
     return (
         <section id="projects" className="py-24 px-6 bg-black relative w-full overflow-hidden">
 
-            {/* --- 1. Background Grid Pattern (Ditambahkan) --- */}
+            {/* Background Grid Pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none opacity-80 z-0" />
 
             {/* Ambient Glow */}
@@ -249,9 +264,9 @@ const Projects = () => {
                                 key={cat}
                                 onClick={() => setActiveCategory(cat)}
                                 className={`
-                   relative px-5 py-2 rounded-full text-sm font-medium transition-colors duration-300
-                   ${activeCategory === cat ? "text-white" : "text-neutral-400 hover:text-white"}
-                 `}
+                                   relative px-5 py-2 rounded-full text-sm font-medium transition-colors duration-300
+                                   ${activeCategory === cat ? "text-white" : "text-neutral-400 hover:text-white"}
+                                 `}
                             >
                                 {activeCategory === cat && (
                                     <motion.div
